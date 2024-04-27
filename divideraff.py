@@ -33,7 +33,8 @@ flipkart_keywords=['fkrt','flipkart','boat','croma']
 ajio_keywords=['ajiio','myntr']
 meesho_keywords=['meesho','shopsy','msho']
 beauty_keywords=['mamaearth','bombayshavingcompany','beardo','themancompany','wow','nykaa','xyxx']
-cc_keywords=['axis','hdfc','icici','sbm','sbi','credit','idfc','aubank','hsbc']
+cc_keywords=['axis','hdfc','icici','sbm','sbi','credit','idfc','aubank','hsbc','Axis','Hdfc','Icici','Sbm','Sbi','Credit','Idfc','Aubank','Hsbc',
+            'AXIS','HDFC','ICICI','SBM','SBI','CREDIT','IDFC','AUBANK','HSBC']
 
 shortnerfound=['extp','bitli','bit.ly','bitly']
 keyword_to_chat_id = {
