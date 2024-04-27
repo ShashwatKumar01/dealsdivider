@@ -108,6 +108,19 @@ async def forward_message(client, message):
         if any(keyword in inputvalue for keyword in keywords):
             await send(chat_id, message)
 
+@app.on_message(filters.chat(-1001873285810))
+async def forward_message2(client, message):
+
+    if message.photo:
+        text = message.caption if message.caption else message.text
+        inputvalue = text
+    elif message.text:
+        inputvalue = message.text
+
+    if any(keyword in inputvalue for keyword in meesho_keywords):
+        await send(meesho_id,message)
+
+
 @bot.before_serving
 async def before_serving():
     await app.start()
