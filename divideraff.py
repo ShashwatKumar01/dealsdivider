@@ -20,7 +20,7 @@ bot = Quart(__name__)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-source_channel_id = [-1002110764294,-1001849813716]  # Replace with the source channel ID
+source_channel_id = [-1002110764294]  # Replace with the source channel ID
 amazon_id = -1002049093974
 flipkart_id = -1002124607504
 meesho_id = -1002133412234
@@ -59,7 +59,9 @@ def unshorten_url(short_url):
     return shorturi
 async def send(id,message):
     Promo = InlineKeyboardMarkup(
-        [[InlineKeyboardButton("Join Deals HUB", url="https://t.me/addlist/FYEMFZCWeTY2ZmE1")]])
+        [[InlineKeyboardButton("Join Deals HUB", url="https://t.me/addlist/FYEMFZCWeTY2ZmE1")],
+        [InlineKeyboardButton("Maximum Deals", url="https://t.me/maximum_deals")]
+        ])
 
     if message.photo:
         with tempfile.NamedTemporaryFile(delete=False) as temp_file:
