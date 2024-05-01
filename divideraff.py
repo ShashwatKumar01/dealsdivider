@@ -29,10 +29,10 @@ cc_id= -1002078634799
 beauty_id= -1002046497963
 
 amazon_keywords=['amzn','amazon','tinyurl']
-flipkart_keywords=['fkrt','flipkart','boat','croma']
+flipkart_keywords=['fkrt','flipkart','boat','croma','tatacliq']
 ajio_keywords=['ajiio','myntr']
 meesho_keywords=['meesho','shopsy','msho']
-beauty_keywords=['mamaearth','bombayshavingcompany','beardo','themancompany','wow','nykaa','xyxx']
+beauty_keywords=['mamaearth','bombayshavingcompany','beardo','themancompany','wow','nykaa','xyxx','Bombay Shaving Company','BSC','TMC','foxtale']
 cc_keywords=['axis','hdfc','icici','sbm','sbi','credit','idfc','aubank','hsbc','Axis','Hdfc','Icici','Sbm','Sbi','Credit','Idfc','Aubank','Hsbc',
             'AXIS','HDFC','ICICI','SBM','SBI','CREDIT','IDFC','AUBANK','HSBC']
 
@@ -96,7 +96,7 @@ async def forward_message(client, message):
 
     if any(keyword in inputvalue for keyword in shortnerfound):
         # print(inputvalue)
-        print(extract_link_from_text(inputvalue))
+        # print(extract_link_from_text(inputvalue))
         inputvalue= unshorten_url(extract_link_from_text(inputvalue))
         # print(inputvalue)
     # source_link= unshorten_url(extract_link_from_text(inputvalue))
@@ -118,6 +118,9 @@ async def forward_message2(client, message):
         inputvalue = text
     elif message.text:
         inputvalue = message.text
+
+    if any(keyword in inputvalue for keyword in shortnerfound):
+        inputvalue= unshorten_url(extract_link_from_text(inputvalue))
 
     if any(keyword in inputvalue for keyword in meesho_keywords):
         await send(meesho_id,message)
