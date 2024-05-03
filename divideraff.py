@@ -60,7 +60,7 @@ def unshorten_url(short_url):
 async def send(id,message):
     Promo = InlineKeyboardMarkup(
         [[InlineKeyboardButton("Join Deals HUB", url="https://t.me/addlist/FYEMFZCWeTY2ZmE1")],
-        [InlineKeyboardButton("Maximum Deals", url="https://t.me/maximum_deals")]
+        [InlineKeyboardButton("Main Channel", url="https://t.me/Deals_and_Discounts_Channel/37444")]
         ])
 
     if message.photo:
