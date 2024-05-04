@@ -60,20 +60,21 @@ def unshorten_url(short_url):
 async def send(id,message):
     Promo = InlineKeyboardMarkup(
         [[InlineKeyboardButton("Join Deals HUB", url="https://t.me/addlist/FYEMFZCWeTY2ZmE1")],
-        [InlineKeyboardButton("Main Channel", url="https://t.me/Deals_and_Discounts_Channel/37444")]
-        ])
+         [InlineKeyboardButton("Join Main Channel", url="https://t.me/Deals_and_Discounts_Channel/37444")]
+         ])
 
     if message.photo:
         with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-            # app.download_media(message)
             await message.download(file_name=temp_file.name)
-
             with open(temp_file.name, 'rb') as f:
                 photo_bytes = BytesIO(f.read())
+        await app.send_photo(chat_id=id,photo=photo_bytes,caption=message.caption,caption_entities=message.caption_entities,reply_markup=Promo)
 
-        await app.send_photo(chat_id=id,photo=photo_bytes,caption=message.caption,reply_markup=Promo)
+
+
+
     elif message.text:
-        await app.send_message(chat_id=id,text=message.text,disable_web_page_preview=True)
+        await app.send_message(chat_id=id,text=message.text,entities=message.entities,disable_web_page_preview=True)
 
 
 @bot.route('/')
@@ -87,16 +88,33 @@ async def start(client, message):
 
 @app.on_message(filters.chat(source_channel_id))
 async def forward_message(client, message):
-
-    if message.photo:
-        text = message.caption if message.caption else message.text
-        inputvalue = text
-    elif message.text:
-        inputvalue = message.text
+    inputvalue=''
+    if message.caption_entities:
+        for entity in message.caption_entities:
+            if entity.url is not None:
+                inputvalue=entity.url
+        # print(hyerlinkurl)
+        if inputvalue=='':
+            text = message.caption if message.caption else message.text
+            inputvalue = text
+    # if message.photo:
+    #     text = message.caption if message.caption else message.text
+    #     inputvalue = text
+    # elif message.text:
+    #     inputvalue = message.text
+    # print(inputvalue)
+    #
+    if message.entities:
+        for entity in message.entities:
+            if entity.url is not None:
+                inputvalue=entity.url
+        # print(hyerlinkurl)
+        if inputvalue=='':
+            text = message.text
+            inputvalue = text
 
     if any(keyword in inputvalue for keyword in shortnerfound):
-        # print(inputvalue)
-        # print(extract_link_from_text(inputvalue))
+        print(extract_link_from_text(inputvalue))
         inputvalue= unshorten_url(extract_link_from_text(inputvalue))
         # print(inputvalue)
     # source_link= unshorten_url(extract_link_from_text(inputvalue))
