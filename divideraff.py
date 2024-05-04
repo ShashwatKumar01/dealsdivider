@@ -141,7 +141,11 @@ async def forward_message2(client, message):
         inputvalue= unshorten_url(extract_link_from_text(inputvalue))
 
     if any(keyword in inputvalue for keyword in meesho_keywords):
-        await send(meesho_id,message)
+        await send(meesho_id,message)            
+    if any(keyword in inputvalue for keyword in ajio_keywords):
+        await send(ajiomyntra_id,message)
+    if any(keyword in inputvalue for keyword in beauty_keywords):
+        await send(beauty_id,message)
 
 
 @bot.before_serving
