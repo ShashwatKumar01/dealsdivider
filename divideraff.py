@@ -144,7 +144,8 @@ async def forward_message2(client, message):
         await send(meesho_id,message)            
     if any(keyword in inputvalue for keyword in beauty_keywords):
         await send(beauty_id,message)
-
+    if any(keyword in inputvalue for keyword in ajio_keywords):
+        await send(ajiomyntra_id,message)
 
 @bot.before_serving
 async def before_serving():
