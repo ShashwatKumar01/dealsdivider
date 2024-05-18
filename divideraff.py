@@ -29,7 +29,7 @@ cc_id= -1002078634799
 beauty_id= -1002046497963
 
 amazon_keywords=['amzn','amazon','tinyurl']
-flipkart_keywords=['fkrt','flipkart','boat','croma','tatacliq']
+flipkart_keywords=['fkrt','flipkart','boat','croma','tatacliq','fktr']
 ajio_keywords=['ajiio','myntr']
 meesho_keywords=['meesho','shopsy','msho']
 beauty_keywords=['mamaearth','bombayshavingcompany','beardo','themancompany','wow','nykaa','xyxx','Bombay Shaving Company','BSC','TMC','foxtale']
