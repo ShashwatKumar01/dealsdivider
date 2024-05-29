@@ -30,13 +30,13 @@ beauty_id= -1002046497963
 
 amazon_keywords=['amzn','amazon','tinyurl']
 flipkart_keywords=['fkrt','flipkart','boat','croma','tatacliq','fktr']
-ajio_keywords=['ajiio','myntr']
+ajio_keywords=['ajiio','myntr','xyxx']
 meesho_keywords=['meesho','shopsy','msho']
-beauty_keywords=['mamaearth','bombayshavingcompany','beardo','themancompany','wow','nykaa','xyxx','Bombay Shaving Company','BSC','TMC','foxtale']
+beauty_keywords=['mamaearth','bombayshavingcompany','beardo','themancompany','wow','nykaa','mCaffeine','Bombay Shaving Company','BSC','TMC','foxtale','facewash','deo','cream','trimmer','bodywash','fitspire','PUER']
 cc_keywords=['axis','hdfc','icici','sbm','sbi','credit','idfc','aubank','hsbc','Axis','Hdfc','Icici','Sbm','Sbi','Credit','Idfc','Aubank','Hsbc',
             'AXIS','HDFC','ICICI','SBM','SBI','CREDIT','IDFC','AUBANK','HSBC']
 
-shortnerfound=['extp','bitli','bit.ly','bitly']
+shortnerfound=['extp','bitli','bit.ly','bitly','bitili']
 keyword_to_chat_id = {
     tuple(amazon_keywords): amazon_id,
     tuple(flipkart_keywords): flipkart_id,
