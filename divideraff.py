@@ -33,8 +33,9 @@ flipkart_keywords=['fkrt','flipkart','boat','croma','tatacliq','fktr']
 ajio_keywords=['ajiio','myntr','xyxx']
 meesho_keywords=['meesho','shopsy','msho']
 beauty_keywords=['mamaearth','bombayshavingcompany','beardo','themancompany','wow','nykaa','mCaffeine','Bombay Shaving Company','BSC','TMC','foxtale','facewash','deo','cream','trimmer','bodywash','fitspire','PUER']
-cc_keywords=['axis','hdfc','icici','sbm','sbi','credit','idfc','aubank','hsbc','Axis','Hdfc','Icici','Sbm','Sbi','Credit','Idfc','Aubank','Hsbc',
-            'AXIS','HDFC','ICICI','SBM','SBI','CREDIT','IDFC','AUBANK','HSBC']
+# cc_keywords=['axis','hdfc','icici','sbm','sbi','credit','idfc','aubank','hsbc','Axis','Hdfc','Icici','Sbm','Sbi','Credit','Idfc','Aubank','Hsbc',
+#             'AXIS','HDFC','ICICI','SBM','SBI','CREDIT','IDFC','AUBANK','HSBC']
+cc_keywords=['Apply Now','Lifetime Free','Apply for',' Lifetime free','Benifits','Apply here','Lifetime FREE','ELIGIBILITY','Myzone','Rupay','rupay','Complimentary','Apply from here','annual fee','Annual fee','joining fee']
 
 shortnerfound=['extp','bitli','bit.ly','bitly','bitili']
 keyword_to_chat_id = {
@@ -59,8 +60,8 @@ def unshorten_url(short_url):
     return shorturi
 async def send(id,message):
     Promo = InlineKeyboardMarkup(
-        [[InlineKeyboardButton("Join Deals HUB", url="https://t.me/addlist/FYEMFZCWeTY2ZmE1")],
-         [InlineKeyboardButton("Join Main Channel", url="https://t.me/+HeHY-qoy3vsxYWU1")]
+        [[InlineKeyboardButton("Deals HUB 🛒", url="https://t.me/addlist/FReIeSd3Hyg5NjJl"),InlineKeyboardButton("PriceHistory Deals 📉", url="https://t.me/+rTx5B9g6XYxmNmE1")],
+         [InlineKeyboardButton("Main Channel 🔴", url="https://t.me/+HeHY-qoy3vsxYWU1")]
          ])
 
     if message.photo:
