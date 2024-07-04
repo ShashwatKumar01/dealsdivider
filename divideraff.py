@@ -38,8 +38,9 @@ beauty_keywords=['mamaearth','bombayshavingcompany','beardo','themancompany','wo
 cc_keywords=['Apply Now','Lifetime Free','Apply for',' Lifetime free','Benifits','Apply here','Lifetime FREE','ELIGIBILITY','Myzone','Rupay','rupay','Complimentary','Apply from here','annual fee','Annual fee','joining fee']
 
 shortnerfound=['extp','bitli','bit.ly','bitly','bitili']
+
+# tuple(amazon_keywords): amazon_id,
 keyword_to_chat_id = {
-    tuple(amazon_keywords): amazon_id,
     tuple(flipkart_keywords): flipkart_id,
     tuple(meesho_keywords): meesho_id,
     tuple(ajio_keywords): ajiomyntra_id,
