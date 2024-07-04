@@ -41,6 +41,7 @@ shortnerfound=['extp','bitli','bit.ly','bitly','bitili']
 
 # tuple(amazon_keywords): amazon_id,
 keyword_to_chat_id = {
+    tuple(amazon_keywords): amazon_id,
     tuple(flipkart_keywords): flipkart_id,
     tuple(meesho_keywords): meesho_id,
     tuple(ajio_keywords): ajiomyntra_id,
