@@ -76,7 +76,7 @@ async def send(id,message):
             await message.download(file_name=temp_file.name)
             with open(temp_file.name, 'rb') as f:
                 photo_bytes = BytesIO(f.read())
-        if 'tinyurl' in message.caption:
+        if 'tinyurl' in message.caption or if 'amazon' in message.caption or if 'amzn' in message.caption:
             urls = extract_link_from_text2(message.caption)
             text = message.caption
 
@@ -90,7 +90,7 @@ async def send(id,message):
 
 
     elif message.text:
-        if 'tinyurl' in message.text:
+        if 'tinyurl' in message.text or if 'amazon' in message.text or if 'amzn' in message.text:
             urls = extract_link_from_text2(message.text)
             text = message.text
 
