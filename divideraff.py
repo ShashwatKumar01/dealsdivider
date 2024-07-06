@@ -78,7 +78,7 @@ async def send(id,message):
                 photo_bytes = BytesIO(f.read())
         if 'tinyurl' in message.caption or 'amazon' in message.caption or 'amzn' in message.caption:
             urls = extract_link_from_text2(message.caption)
-            text = message.caption
+            Newtext = message.caption
 
             for url in urls:
                 Newtext = Newtext.replace(url, f'<b><a href={unshorten_url(url)}> Buy Now</a></b>')
@@ -92,7 +92,7 @@ async def send(id,message):
     elif message.text:
         if 'tinyurl' in message.text or 'amazon' in message.text or 'amzn' in message.text:
             urls = extract_link_from_text2(message.text)
-            text = message.text
+            Newtext = message.text
 
             for url in urls:
                 Newtext = Newtext.replace(url, f'<b><a href={unshorten_url(url)}>Buy Now</a></b>')
