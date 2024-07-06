@@ -55,6 +55,11 @@ def extract_link_from_text(text):
     urls = re.findall(url_pattern, text)
     return urls[0] if urls else None
 
+def extract_link_from_text2(text):
+    # Regular expression pattern to match a URL
+    url_pattern = r'https?://\S+'
+    urls = re.findall(url_pattern, text)
+    return urls
 def unshorten_url(short_url):
     unshortener = UnshortenIt()
     shorturi = unshortener.unshorten(short_url)
@@ -71,13 +76,25 @@ async def send(id,message):
             await message.download(file_name=temp_file.name)
             with open(temp_file.name, 'rb') as f:
                 photo_bytes = BytesIO(f.read())
-        await app.send_photo(chat_id=id,photo=photo_bytes,caption=message.caption,caption_entities=message.caption_entities,reply_markup=Promo)
+        if 'tinyurl' in message.caption:
+            urls = extract_link_from_text2(message.caption)
+            for url in urls:
+                Newtext = message.text.replace(url, f'<b><a href={unshorten_url(url)}>Buy Now</a></b>')
+            await app.send_photo(chat_id=id, photo=photo_bytes,caption=f'<b>{Newtext}</b>',reply_markup=Promo)
+        else:
+            await app.send_photo(chat_id=id,photo=photo_bytes,caption=message.caption,caption_entities=message.caption_entities,reply_markup=Promo)
 
 
 
 
     elif message.text:
-        await app.send_message(chat_id=id,text=message.text,entities=message.entities,disable_web_page_preview=True)
+        if 'tinyurl' in message.text:
+            urls = extract_link_from_text2(message.text)
+            for url in urls:
+                Newtext = message.text.replace(url, f'<b><a href={unshorten_url(url)}>Buy Now</a></b>')
+            await app.send_message(chat_id=id, text=f'<b>{Newtext}</b>', disable_web_page_preview=True)
+        else:
+            await app.send_message(chat_id=id,text=message.text,entities=message.entities,disable_web_page_preview=True)
 
 
 @bot.route('/')
@@ -100,13 +117,7 @@ async def forward_message(client, message):
         if inputvalue=='':
             text = message.caption if message.caption else message.text
             inputvalue = text
-    # if message.photo:
-    #     text = message.caption if message.caption else message.text
-    #     inputvalue = text
-    # elif message.text:
-    #     inputvalue = message.text
-    # print(inputvalue)
-    #
+
     if message.entities:
         for entity in message.entities:
             if entity.url is not None:
@@ -117,15 +128,9 @@ async def forward_message(client, message):
             inputvalue = text
 
     if any(keyword in inputvalue for keyword in shortnerfound):
-        print(extract_link_from_text(inputvalue))
+        # print(extract_link_from_text(inputvalue))
         inputvalue= unshorten_url(extract_link_from_text(inputvalue))
-        # print(inputvalue)
-    # source_link= unshorten_url(extract_link_from_text(inputvalue))
 
-
-    # if any(keyword in inputvalue for keyword in amazon_keywords):
-    #     await send(amazon_id,message)
-    #     # await app.forward_messages(amazon_id, from_chat_id=source_channel_id, message_ids=message.id)
 
     for keywords, chat_id in keyword_to_chat_id.items():
         if any(keyword in inputvalue for keyword in keywords):
@@ -144,7 +149,7 @@ async def forward_message2(client, message):
         inputvalue= unshorten_url(extract_link_from_text(inputvalue))
 
     if any(keyword in inputvalue for keyword in meesho_keywords):
-        await send(meesho_id,message)            
+        await send(meesho_id,message)
     if any(keyword in inputvalue for keyword in beauty_keywords):
         await send(beauty_id,message)
     # if any(keyword in inputvalue for keyword in ajio_keywords):
