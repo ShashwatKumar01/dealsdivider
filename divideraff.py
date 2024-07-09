@@ -92,7 +92,7 @@ async def send(id,message):
             await message.download(file_name=temp_file.name)
             with open(temp_file.name, 'rb') as f:
                 photo_bytes = BytesIO(f.read())
-        if 'tinyurl' in message.caption:
+        if 'tinyurl' in message.caption  or 'amazon' in message.caption:
             urls = extract_link_from_text2(message.caption)
             text = message.caption
 
@@ -105,13 +105,13 @@ async def send(id,message):
              Newtext=tinycovert(text)
              await app.send_photo(chat_id=id, photo=photo_bytes, caption=f'<b>{Newtext}</b>',reply_markup=Promo)
         else:
-            await app.send_photo(chat_id=id,photo=photo_bytes,caption=message.caption,caption_entities=message.caption_entities,reply_markup=Promo)
+            await app.send_photo(chat_id=id,photo=photo_bytes,caption=f'<b>{message.caption}</b>',caption_entities=message.caption_entities,reply_markup=Promo)
 
 
 
 
     elif message.text:
-        if 'tinyurl' in message.text:
+        if 'tinyurl' in message.text  or 'amazon' in message.text:
             urls = extract_link_from_text2(message.text)
             text = message.text
 
@@ -121,9 +121,9 @@ async def send(id,message):
         elif 'wishlink' in message.text:
             text = message.text
             Newtext = tinycovert(text)
-            await app.send_photo(chat_id=id, caption=f'<b>{Newtext}</b>',disable_web_page_preview=True)
+            await app.send_message(chat_id=id, text=f'<b>{Newtext}</b>',disable_web_page_preview=True)
         else:
-            await app.send_message(chat_id=id,text=message.text,entities=message.entities,disable_web_page_preview=True)
+            await app.send_message(chat_id=id,text=f'<b>{message.text}</b>',entities=message.entities,disable_web_page_preview=True)
 
 
 @bot.route('/')
