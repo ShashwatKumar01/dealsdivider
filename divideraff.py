@@ -1,6 +1,7 @@
 import tempfile
 from io import BytesIO
 
+import requests
 from pyrogram import Client, filters, enums
 from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid
 import logging
@@ -31,7 +32,7 @@ beauty_id= -1002046497963
 amazon_keywords=['amzn','amazon','tinyurl']
 flipkart_keywords=['fkrt','flipkart','boat','croma','tatacliq','fktr']
 ajio_keywords=['ajiio','myntr','xyxx']
-meesho_keywords=['meesho','shopsy','msho']
+meesho_keywords=['meesho','shopsy','msho','wishlink']
 beauty_keywords=['mamaearth','bombayshavingcompany','beardo','themancompany','wow','nykaa','mCaffeine','Bombay Shaving Company','BSC','TMC','foxtale','facewash','deo','cream','trimmer','bodywash','fitspire','PUER']
 # cc_keywords=['axis','hdfc','icici','sbm','sbi','credit','idfc','aubank','hsbc','Axis','Hdfc','Icici','Sbm','Sbi','Credit','Idfc','Aubank','Hsbc',
 #             'AXIS','HDFC','ICICI','SBM','SBI','CREDIT','IDFC','AUBANK','HSBC']
@@ -55,6 +56,21 @@ def extract_link_from_text(text):
     urls = re.findall(url_pattern, text)
     return urls[0] if urls else None
 
+def tinycovert(text):
+    unshortened_urls = {}
+    urls = extract_link_from_text2(text)
+    for url in urls:
+        unshortened_urls[url] = tiny(url)
+    for original_url, unshortened_url in unshortened_urls.items():
+        text = text.replace(original_url, unshortened_url)
+    return text
+
+def tiny(long_url):
+    url = 'http://tinyurl.com/api-create.php?url='
+
+    response = requests.get(url + long_url)
+    short_url = response.text
+    return short_url
 def extract_link_from_text2(text):
     # Regular expression pattern to match a URL
     url_pattern = r'https?://\S+'
@@ -76,29 +92,38 @@ async def send(id,message):
             await message.download(file_name=temp_file.name)
             with open(temp_file.name, 'rb') as f:
                 photo_bytes = BytesIO(f.read())
-        if 'tinyurl' in message.caption or 'amazon' in message.caption or 'amzn' in message.caption:
+        if 'tinyurl' in message.caption:
             urls = extract_link_from_text2(message.caption)
-            Newtext = message.caption
+            text = message.caption
 
             for url in urls:
-                Newtext = Newtext.replace(url, f'<b><a href={unshorten_url(url)}> Buy Now</a></b>')
-            await app.send_photo(chat_id=id, photo=photo_bytes,caption=f'<b>{Newtext}</b>\n',reply_markup=Promo)
+                Newtext = text.replace(url, f'<b><a href={unshorten_url(url)}>Buy Now</a></b>')
+            await app.send_photo(chat_id=id, photo=photo_bytes,caption=f'<b>{Newtext}</b>',reply_markup=Promo)
+        elif 'wishlink' in message.caption:
+
+             text = message.caption
+             Newtext=tinycovert(text)
+             await app.send_photo(chat_id=id, photo=photo_bytes, caption=f'<b>{Newtext}</b>',reply_markup=Promo)
         else:
-            await app.send_photo(chat_id=id,photo=photo_bytes,caption=f'<b>{message.caption}</b>',reply_markup=Promo)
+            await app.send_photo(chat_id=id,photo=photo_bytes,caption=message.caption,caption_entities=message.caption_entities,reply_markup=Promo)
 
 
 
 
     elif message.text:
-        if 'tinyurl' in message.text or 'amazon' in message.text or 'amzn' in message.text:
+        if 'tinyurl' in message.text:
             urls = extract_link_from_text2(message.text)
-            Newtext = message.text
+            text = message.text
 
             for url in urls:
-                Newtext = Newtext.replace(url, f'<b><a href={unshorten_url(url)}>Buy Now</a></b>')
+                Newtext = text.replace(url, f'<b><a href={unshorten_url(url)}>Buy Now</a></b>')
             await app.send_message(chat_id=id, text=f'<b>{Newtext}</b>', disable_web_page_preview=True)
+        elif 'wishlink' in message.text:
+            text = message.text
+            Newtext = tinycovert(text)
+            await app.send_photo(chat_id=id, caption=f'<b>{Newtext}</b>',disable_web_page_preview=True)
         else:
-            await app.send_message(chat_id=id,text=f'<b>{message.text}</b>',disable_web_page_preview=True)
+            await app.send_message(chat_id=id,text=message.text,entities=message.entities,disable_web_page_preview=True)
 
 
 @bot.route('/')
