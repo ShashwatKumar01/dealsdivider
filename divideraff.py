@@ -94,10 +94,10 @@ async def send(id,message):
                 photo_bytes = BytesIO(f.read())
         if 'tinyurl' in message.caption  or 'amazon' in message.caption:
             urls = extract_link_from_text2(message.caption)
-            text = message.caption
+            Newtext = message.caption
 
             for url in urls:
-                Newtext = text.replace(url, f'<b><a href={unshorten_url(url)}>Buy Now</a></b>')
+                Newtext = Newtext.replace(url, f'<b><a href={unshorten_url(url)}>Buy Now</a></b>')
             await app.send_photo(chat_id=id, photo=photo_bytes,caption=f'<b>{Newtext}</b>',reply_markup=Promo)
         elif 'wishlink' in message.caption:
 
@@ -113,10 +113,10 @@ async def send(id,message):
     elif message.text:
         if 'tinyurl' in message.text  or 'amazon' in message.text:
             urls = extract_link_from_text2(message.text)
-            text = message.text
+            Newtext = message.text
 
             for url in urls:
-                Newtext = text.replace(url, f'<b><a href={unshorten_url(url)}>Buy Now</a></b>')
+                Newtext = Newtext.replace(url, f'<b><a href={unshorten_url(url)}>Buy Now</a></b>')
             await app.send_message(chat_id=id, text=f'<b>{Newtext}</b>', disable_web_page_preview=True)
         elif 'wishlink' in message.text:
             text = message.text
