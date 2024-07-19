@@ -33,7 +33,8 @@ amazon_keywords=['amzn','amazon','tinyurl']
 flipkart_keywords=['fkrt','flipkart','boat','croma','tatacliq','fktr']
 ajio_keywords=['ajiio','myntr','xyxx']
 meesho_keywords=['meesho','shopsy','msho','wishlink']
-beauty_keywords=['mamaearth','bombayshavingcompany','beardo','themancompany','wow','nykaa','mCaffeine','Bombay Shaving Company','BSC','TMC','foxtale','facewash','deo','cream','trimmer','bodywash','fitspire','PUER']
+beauty_keywords=['mamaearth','bombayshavingcompany','beardo','themancompany','wow','nykaa','mCaffeine','Bombay Shaving Company','BSC','TMC','foxtale','facewash','trimmer','bodywash','fitspire','PUER','perfume',
+                 'lipstick']
 # cc_keywords=['axis','hdfc','icici','sbm','sbi','credit','idfc','aubank','hsbc','Axis','Hdfc','Icici','Sbm','Sbi','Credit','Idfc','Aubank','Hsbc',
 #             'AXIS','HDFC','ICICI','SBM','SBI','CREDIT','IDFC','AUBANK','HSBC']
 cc_keywords=['Apply Now','Lifetime Free','Apply for',' Lifetime free','Benifits','Apply here','Lifetime FREE','ELIGIBILITY','Myzone','Rupay','rupay','Complimentary','Apply from here','annual fee','Annual fee','joining fee']
