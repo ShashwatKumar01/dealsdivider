@@ -33,7 +33,7 @@ amazon_keywords=['amzn','amazon','tinyurl']
 flipkart_keywords=['fkrt','flipkart','boat','croma','tatacliq','fktr']
 ajio_keywords=['ajiio','myntr','xyxx']
 meesho_keywords=['meesho','shopsy','msho','wishlink']
-beauty_keywords=['mamaearth','bombayshavingcompany','beardo','themancompany','wow','nykaa','mCaffeine','Bombay Shaving Company','BSC','TMC','foxtale','facewash','trimmer','bodywash','fitspire','PUER','perfume',
+beauty_keywords=['mamaearth','bombayshavingcompany','beardo','Beardo','Tresemme','themancompany','wow','nykaa','mCaffeine','Bombay Shaving Company','BSC','TMC','foxtale','facewash','trimmer','bodywash','fitspire','PUER','perfume',
                  'lipstick']
 # cc_keywords=['axis','hdfc','icici','sbm','sbi','credit','idfc','aubank','hsbc','Axis','Hdfc','Icici','Sbm','Sbi','Credit','Idfc','Aubank','Hsbc',
 #             'AXIS','HDFC','ICICI','SBM','SBI','CREDIT','IDFC','AUBANK','HSBC']
@@ -159,7 +159,14 @@ async def forward_message(client, message):
 
     if any(keyword in inputvalue for keyword in shortnerfound):
         # print(extract_link_from_text(inputvalue))
-        inputvalue= unshorten_url(extract_link_from_text(inputvalue))
+        # inputvalue= unshorten_url(extract_link_from_text(inputvalue))
+        unshortened_urls = {}
+        urls = extract_link_from_text2(inputvalue)
+        for url in urls:
+            unshortened_urls[url] = unshorten_url(url)
+        for original_url, unshortened_url in unshortened_urls.items():
+            inputvalue = inputvalue.replace(original_url, unshortened_url)
+        
 
 
     for keywords, chat_id in keyword_to_chat_id.items():
