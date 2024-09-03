@@ -1,4 +1,4 @@
-import tempfile
+
 from io import BytesIO
 
 import requests
@@ -89,24 +89,24 @@ async def send(id,message):
          ])
 
     if message.photo:
-        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-            await message.download(file_name=temp_file.name)
-            with open(temp_file.name, 'rb') as f:
-                photo_bytes = BytesIO(f.read())
+        # with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        #     await message.download(file_name=temp_file.name)
+        #     with open(temp_file.name, 'rb') as f:
+        #         photo_bytes = BytesIO(f.read())
         if 'tinyurl' in message.caption  or 'amazon' in message.caption:
             urls = extract_link_from_text2(message.caption)
             Newtext = message.caption
 
             for url in urls:
                 Newtext = Newtext.replace(url, f'<b><a href={unshorten_url(url)}>Buy Now</a></b>')
-            await app.send_photo(chat_id=id, photo=photo_bytes,caption=f'<b>{Newtext}</b>',reply_markup=Promo)
+            await app.send_photo(chat_id=id, photo=message.photo.file_id,caption=f'<b>{Newtext}</b>',reply_markup=Promo)
         elif 'wishlink' in message.caption:
 
              text = message.caption
              Newtext=tinycovert(text)
-             await app.send_photo(chat_id=id, photo=photo_bytes, caption=f'<b>{Newtext}</b>',reply_markup=Promo)
+             await app.send_photo(chat_id=id, photo=message.photo.file_id, caption=f'<b>{Newtext}</b>',reply_markup=Promo)
         else:
-            await app.send_photo(chat_id=id,photo=photo_bytes,caption=f'<b>{message.caption}</b>',reply_markup=Promo)
+            await app.send_photo(chat_id=id,photo=message.photo.file_id,caption=f'<b>{message.caption}</b>',reply_markup=Promo)
 
 
 
