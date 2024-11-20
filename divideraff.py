@@ -1,6 +1,6 @@
+from io import BytesIO
 
 import requests
-from playwright.async_api import async_playwright
 from pyrogram import Client, filters, enums
 from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid
 import logging
@@ -9,9 +9,6 @@ import re
 import asyncio
 from quart import Quart
 from unshortenit import UnshortenIt
-from playwright.sync_api import sync_playwright
-
-
 api_id = '26566076'
 api_hash = '40ce27837b95819c42cac67b46a2dc2b'
 bot_token = '6810447810:AAHTehMwBCzhG2Eicu2OBvAnSoo-d9D9bYs'
@@ -19,7 +16,6 @@ app = Client("my_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
 
 # Define a handler for the /start command
 bot = Quart(__name__)
-# bot.config['PROVIDE_AUTOMATIC_OPTIONS'] = True
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -53,8 +49,6 @@ keyword_to_chat_id = {
     tuple(flipkart_keywords): flipkart_id,
     tuple(meesho_keywords): meesho_id,
     tuple(ajio_keywords): ajiomyntra_id,
-    tuple(beauty_keywords): beauty_id,
-    tuple(cc_keywords): cc_id
 }
 
 
@@ -90,31 +84,19 @@ def extract_link_from_text2(text):
     return urls
 
 
-# def unshorten_url(short_url):
-#     unshortener = UnshortenIt()
-#     shorturi = unshortener.unshorten(short_url)
-#     # print(shorturi)
-#     return shorturi
-
-async def unshorten_url(url):
-    try:
-        async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=True)
-            page = await browser.new_page()
-            await page.goto(url)
-            final_url = page.url
-            await browser.close()
-            return final_url
-    except Exception as e:
-        print(f"Error: {e}")
-        return None
+def unshorten_url(short_url):
+    unshortener = UnshortenIt()
+    shorturi = unshortener.unshorten(short_url)
+    # print(shorturi)
+    return shorturi
 
 
 async def send(id, message):
     Promo = InlineKeyboardMarkup(
-        [[InlineKeyboardButton("Deals HUB 🛒", url="https://t.me/addlist/FReIeSd3Hyg5NjJl"),
-          InlineKeyboardButton("PriceHistory Deals 📉", url="https://t.me/+rTx5B9g6XYxmNmE1")],
-         [InlineKeyboardButton("Announcement 🚨 Must Visit", url="https://t.me/Deals_and_Discounts_Channel2/13")]
+        [
+         [InlineKeyboardButton("Main Channel 🛒", url="https://t.me/deals_by_divya"),
+          InlineKeyboardButton("WhatsApp 💬", url="https://t.me/+rTx5B9g6XYxmNmE1")],
+         [InlineKeyboardButton("Join All ", url="https://t.me/Deals_and_Discounts_Channel2/13")]
          ])
 
     if message.photo:
@@ -127,11 +109,15 @@ async def send(id, message):
             Newtext = message.caption
 
             for url in urls:
-                newurl = await unshorten_url(url)
-                Newtext = Newtext.replace(url, f'<b><a href={newurl}>Buy Now</a></b>')
+                Newtext = Newtext.replace(url, f'<b><a href={unshorten_url(url)}>Buy Now</a></b>')
             await app.send_photo(chat_id=id, photo=message.photo.file_id, caption=f'<b>{Newtext}</b>',
                                  reply_markup=Promo)
+        elif 'wishlink' in message.caption:
 
+            text = message.caption
+            Newtext = tinycovert(text)
+            await app.send_photo(chat_id=id, photo=message.photo.file_id, caption=f'<b>{Newtext}</b>',
+                                 reply_markup=Promo)
         else:
             await app.send_photo(chat_id=id, photo=message.photo.file_id, caption=f'<b>{message.caption}</b>',
                                  reply_markup=Promo)
@@ -145,10 +131,11 @@ async def send(id, message):
             Newtext = message.text
 
             for url in urls:
-                newurl = await unshorten_url(url)
-                Newtext = Newtext.replace(url, f'<b><a href={newurl}>Buy Now</a></b>')
+                Newtext = Newtext.replace(url, f'<b><a href={unshorten_url(url)}>Buy Now</a></b>')
             await app.send_message(chat_id=id, text=f'<b>{Newtext}</b>', disable_web_page_preview=True)
-
+        elif 'wishlink' in message.text:
+            text = message.text
+            Newtext = tinycovert(text)
             await app.send_message(chat_id=id, text=f'<b>{Newtext}</b>', disable_web_page_preview=True)
         else:
             await app.send_message(chat_id=id, text=f'<b>{message.text}</b>', disable_web_page_preview=True)
@@ -191,14 +178,13 @@ async def forward_message(client, message):
         unshortened_urls = {}
         urls = extract_link_from_text2(inputvalue)
         for url in urls:
-            unshortened_urls[url] = await unshorten_url(url)
+            unshortened_urls[url] = unshorten_url(url)
         for original_url, unshortened_url in unshortened_urls.items():
             inputvalue = inputvalue.replace(original_url, unshortened_url)
 
     for keywords, chat_id in keyword_to_chat_id.items():
         if any(keyword in inputvalue for keyword in keywords):
             await send(chat_id, message)
-
 
 @app.on_message(filters.group & filters.incoming)
 async def handle_text(client, message):
@@ -235,6 +221,7 @@ async def handle_text(client, message):
             inputvalue = inputvalue.split("😱 Deal Time")[0]
         await app.send_message(chat_id=message.chat.id, text=inputvalue)
         await app.send_message(chat_id=-1002198032644, text=inputvalue)
+
 
 @bot.before_serving
 async def before_serving():
