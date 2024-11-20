@@ -90,24 +90,24 @@ def extract_link_from_text2(text):
     return urls
 
 
-# def unshorten_url(short_url):
-#     unshortener = UnshortenIt()
-#     shorturi = unshortener.unshorten(short_url)
-#     # print(shorturi)
-#     return shorturi
+def unshorten_url(short_url):
+    unshortener = UnshortenIt()
+    shorturi = unshortener.unshorten(short_url)
+    # print(shorturi)
+    return shorturi
 
-def unshorten_url(url):
-    try:
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            page = browser.new_page()
-            page.goto(url)
-            final_url = page.url
-            browser.close()
-            return final_url
-    except Exception as e:
-        print(f"Error: {e}")
-        return None
+# def unshorten_url(url):
+#     try:
+#         with sync_playwright() as p:
+#             browser = p.chromium.launch(headless=True)
+#             page = browser.new_page()
+#             page.goto(url)
+#             final_url = page.url
+#             browser.close()
+#             return final_url
+#     except Exception as e:
+#         print(f"Error: {e}")
+#         return None
 
 
 
