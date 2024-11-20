@@ -14,5 +14,4 @@ TgCrypto==1.2.5
 aiohttp==3.9.3
 Quart==0.19.4
 unshortenit==0.4.0
-playwright==1.48.0
 urllib3==1.26.18
