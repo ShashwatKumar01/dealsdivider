@@ -9,6 +9,8 @@ import re
 import asyncio
 from quart import Quart
 from unshortenit import UnshortenIt
+from playwright.sync_api import sync_playwright
+
 
 api_id = '26566076'
 api_hash = '40ce27837b95819c42cac67b46a2dc2b'
@@ -87,11 +89,25 @@ def extract_link_from_text2(text):
     return urls
 
 
-def unshorten_url(short_url):
-    unshortener = UnshortenIt()
-    shorturi = unshortener.unshorten(short_url)
-    # print(shorturi)
-    return shorturi
+# def unshorten_url(short_url):
+#     unshortener = UnshortenIt()
+#     shorturi = unshortener.unshorten(short_url)
+#     # print(shorturi)
+#     return shorturi
+
+def unshorten_url(url):
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page()
+            page.goto(url)
+            final_url = page.url
+            browser.close()
+            return final_url
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+
 
 
 async def send(id, message):
