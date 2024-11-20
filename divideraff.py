@@ -9,7 +9,7 @@ import re
 import asyncio
 from quart import Quart
 from unshortenit import UnshortenIt
-from playwright.sync_api import sync_playwright
+# from playwright.sync_api import sync_playwright
 
 
 api_id = '26566076'
