@@ -19,7 +19,7 @@ app = Client("my_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
 
 # Define a handler for the /start command
 bot = Quart(__name__)
-app.config['PROVIDE_AUTOMATIC_OPTIONS'] = True
+bot.config['PROVIDE_AUTOMATIC_OPTIONS'] = True
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
