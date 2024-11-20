@@ -1,6 +1,6 @@
-from io import BytesIO
 
 import requests
+from playwright.async_api import async_playwright
 from pyrogram import Client, filters, enums
 from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait, UserIsBlocked, PeerIdInvalid
 import logging
@@ -9,7 +9,7 @@ import re
 import asyncio
 from quart import Quart
 from unshortenit import UnshortenIt
-# from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright
 
 
 api_id = '26566076'
@@ -33,7 +33,7 @@ beauty_id = -1002046497963
 
 amazon_keywords = ['amzn', 'amazon', 'tinyurl']
 flipkart_keywords = ['fkrt', 'flipkart', 'boat', 'croma', 'tatacliq', 'fktr', 'Boat', 'Tatacliq']
-ajio_keywords = ['ajiio', 'myntr', 'xyxx']
+ajio_keywords = ['ajiio', 'myntr', 'xyxx','ajio','myntra']
 meesho_keywords = ['meesho', 'shopsy', 'msho', 'wishlink']
 beauty_keywords = ['mamaearth', 'bombayshavingcompany', 'beardo', 'Beardo', 'Tresemme', 'themancompany', 'wow', 'nykaa',
                    'mCaffeine', 'Bombay Shaving Company', 'BSC', 'TMC', 'foxtale', 'facewash', 'trimmer', 'bodywash',
@@ -45,7 +45,7 @@ cc_keywords = ['Apply Now', 'Lifetime Free', 'Apply for', ' Lifetime free', 'Ben
                'ELIGIBILITY', 'Myzone', 'Rupay', 'rupay', 'Complimentary', 'Apply from here', 'annual fee',
                'Annual fee', 'joining fee']
 
-shortnerfound = ['extp', 'bitli', 'bit.ly', 'bitly', 'bitili']
+shortnerfound = ['extp', 'bitli', 'bit.ly', 'bitly', 'bitili','biti','bitiy','bitIy']
 
 # tuple(amazon_keywords): amazon_id,
 keyword_to_chat_id = {
@@ -90,25 +90,24 @@ def extract_link_from_text2(text):
     return urls
 
 
-def unshorten_url(short_url):
-    unshortener = UnshortenIt()
-    shorturi = unshortener.unshorten(short_url)
-    # print(shorturi)
-    return shorturi
+# def unshorten_url(short_url):
+#     unshortener = UnshortenIt()
+#     shorturi = unshortener.unshorten(short_url)
+#     # print(shorturi)
+#     return shorturi
 
-# def unshorten_url(url):
-#     try:
-#         with sync_playwright() as p:
-#             browser = p.chromium.launch(headless=True)
-#             page = browser.new_page()
-#             page.goto(url)
-#             final_url = page.url
-#             browser.close()
-#             return final_url
-#     except Exception as e:
-#         print(f"Error: {e}")
-#         return None
-
+async def unshorten_url(url):
+    try:
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=True)
+            page = await browser.new_page()
+            await page.goto(url)
+            final_url = page.url
+            await browser.close()
+            return final_url
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
 
 
 async def send(id, message):
@@ -128,15 +127,11 @@ async def send(id, message):
             Newtext = message.caption
 
             for url in urls:
-                Newtext = Newtext.replace(url, f'<b><a href={unshorten_url(url)}>Buy Now</a></b>')
+                newurl = await unshorten_url(url)
+                Newtext = Newtext.replace(url, f'<b><a href={newurl}>Buy Now</a></b>')
             await app.send_photo(chat_id=id, photo=message.photo.file_id, caption=f'<b>{Newtext}</b>',
                                  reply_markup=Promo)
-        elif 'wishlink' in message.caption:
 
-            text = message.caption
-            Newtext = tinycovert(text)
-            await app.send_photo(chat_id=id, photo=message.photo.file_id, caption=f'<b>{Newtext}</b>',
-                                 reply_markup=Promo)
         else:
             await app.send_photo(chat_id=id, photo=message.photo.file_id, caption=f'<b>{message.caption}</b>',
                                  reply_markup=Promo)
@@ -150,11 +145,10 @@ async def send(id, message):
             Newtext = message.text
 
             for url in urls:
-                Newtext = Newtext.replace(url, f'<b><a href={unshorten_url(url)}>Buy Now</a></b>')
+                newurl = await unshorten_url(url)
+                Newtext = Newtext.replace(url, f'<b><a href={newurl}>Buy Now</a></b>')
             await app.send_message(chat_id=id, text=f'<b>{Newtext}</b>', disable_web_page_preview=True)
-        elif 'wishlink' in message.text:
-            text = message.text
-            Newtext = tinycovert(text)
+
             await app.send_message(chat_id=id, text=f'<b>{Newtext}</b>', disable_web_page_preview=True)
         else:
             await app.send_message(chat_id=id, text=f'<b>{message.text}</b>', disable_web_page_preview=True)
@@ -197,7 +191,7 @@ async def forward_message(client, message):
         unshortened_urls = {}
         urls = extract_link_from_text2(inputvalue)
         for url in urls:
-            unshortened_urls[url] = unshorten_url(url)
+            unshortened_urls[url] = await unshorten_url(url)
         for original_url, unshortened_url in unshortened_urls.items():
             inputvalue = inputvalue.replace(original_url, unshortened_url)
 
